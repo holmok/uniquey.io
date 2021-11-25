@@ -1,0 +1,19 @@
+{
+  "compilerOptions": {
+    "sourceMap": true,
+    "noEmitOnError": true,
+    "strict": true,
+    "target": "es6",
+    "forceConsistentCasingInFileNames": true,
+    "paths": {
+      "@holmok/*": [
+        "packages/*/src"
+      ]
+    },
+    "module": "commonjs",
+    "esModuleInterop": true,
+    "resolveJsonModule": true,
+    "skipLibCheck": true,
+    "jsx": "react"
+  }
+}
