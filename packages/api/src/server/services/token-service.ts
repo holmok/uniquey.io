@@ -17,7 +17,7 @@ class TokeService {
     this.logger.info('TokeService loaded')
     this.jwtKey = config.get('jwtKey')
     this.uniquey = new Uniquey({ length: 64 })
-    this.cache = new LRU<string, boolean>({ maxAge: 1000 * 60 * 59 })
+    this.cache = new LRU<string, boolean>({ maxAge: 1000 * 60 })
   }
 
   getToken (ip: string): string {
@@ -25,7 +25,7 @@ class TokeService {
     if (!already) {
       this.cache.set(ip, true)
       const token: Token = { ip, id: this.uniquey.create() }
-      const jwt = JWT.sign(token, this.jwtKey, { expiresIn: '1h' })
+      const jwt = JWT.sign(token, this.jwtKey, { expiresIn: '1m' })
       return jwt
     }
     throw new Error('IP already has token.')

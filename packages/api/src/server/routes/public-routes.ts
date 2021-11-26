@@ -3,6 +3,9 @@ import { UniqueyRandomErrorResponse, UniqueyRandomGoodResponse } from '@uniquey.
 import { ServerContext } from '../server'
 import { UniqueyRandomServiceRequest } from '../services/uniquey-services'
 import RequestIp from 'request-ip'
+import LRU from 'lru-cache'
+
+const cache = new LRU<string, number>({ maxAge: 1000 * 60 })
 
 const publicRouter = new KoaRouter()
 
@@ -57,8 +60,24 @@ async function getCheck (ctx: ServerContext): Promise<void> {
 }
 
 async function getRandom (ctx: ServerContext): Promise<void> {
-  ctx.log.info('headers: ', JSON.stringify(ctx.request.headers))
   const uniqueyService = ctx.state.services.uniquey
+  const tokenService = ctx.state.services.token
+
+  const { jwt } = ctx.request.headers
+  const ip = RequestIp.getClientIp(ctx.request)
+
+  if (jwt == null || ip == null) ctx.throw(401)
+  let id = null
+  try {
+    id = tokenService.getToken(ip)
+  } catch (err: any) {
+    ctx.throw(401)
+  }
+
+  const requests = (cache.get(id) ?? 0) + 1
+  if (requests > 6) ctx.throw(429)
+  cache.set(id, requests)
+
   const request: UniqueyRandomServiceRequest = {
     count: validateQueryNumber(ctx.query.count, 1),
     length: validateQueryNumber(ctx.query.length, 8),
@@ -67,7 +86,8 @@ async function getRandom (ctx: ServerContext): Promise<void> {
     multiByteCharacters: true
   }
   const response = uniqueyService.createRandomStrings(request)
-  if (response.isError) {
+  const error: boolean = response.isError
+  if (error) {
     const error = response as UniqueyRandomErrorResponse
     ctx.throw(error.error, 400)
   } else {
