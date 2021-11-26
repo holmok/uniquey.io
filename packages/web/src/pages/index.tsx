@@ -1,12 +1,11 @@
 import { ReactElement, useState } from 'react'
 import Head from 'next/head'
 import Layout from '../components/layout'
+import RandomParts from '../components/random'
 import { Constants } from '@uniquey.io/common'
-import { getClients } from './_app'
-import SWR from 'swr'
 import { validateCharactersLength, validateCharactersUnique } from 'src/utils'
 
-const CHARACTER_SETS = {
+const CHARACTER_SETS: {[key: string]: {key: string, label: string, characters: string}} = {
   base62: { key: 'base62', label: 'Base62', characters: '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ' },
   base36: { key: 'base36', label: 'Base36', characters: '0123456789abcdefghijklmnopqrstuvwxyz' },
   base52: { key: 'base52', label: 'Letters(upper/lower)', characters: 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ' },
@@ -15,19 +14,6 @@ const CHARACTER_SETS = {
   hex: { key: 'hex', label: 'Hex', characters: '0123456789abcdef' },
   emoji: { key: 'emoji', label: 'Emojis', characters: '😀😁😂🤣😃😄😅😆😉😊😋😎😍😘😗😙😚🙂🤗🤩🤔🤨😐😑😶🙄😏😣😥😮🤐😯😪😫😴😌😛😜😝🤤😒😓😔😕🙃🤑😲🙁😖😞😟😤😢😭😦😧😨😩🤯😬😰😱😳🤪😵😡😠🤬😷🤒🤕🤢🤮🤧😇🤠🤡🤥🤫🤭🧐🤓😈👿👹👺💀👻👽🤖💩😺😸😹😻😼😽🙀😿😾👶👦👧👨👩👴👵' },
   animals: { key: 'animals', label: 'Animals', characters: '🐵🐒🦍🐶🐕🐩🐺🦊🐱🐈🦁🐯🐅🐆🐴🐎🦄🦓🐮🐂🐃🐄🐷🐖🐗🐽🐏🐑🐐🐪🐫🦒🐘🦏🐭🐁🐀🐹🐰🐇🐿🦔🦇🐻🐨🐼🐾🦃🐔🐓🐣🐤🐥🐦🐧🕊🦅🦆🦉🐸🐊🐢🦎🐍🐲🐉🦕🦖🐳🐋🐬🐟🐠🐡🦈🐙🐚🦀🦐🦑🐌🦋🐛🐜🐝🐞🦗🕷🕸🦂' }
-}
-
-function RandomParts (props: any): ReactElement {
-  const uniquey = getClients().uniquey()
-  const { data, error } = SWR(`${uniquey.names.random}_${props.num}`, async () => await uniquey.random({
-    characters: props.characters,
-    length: props.length,
-    count: props.count
-  }))
-  if (data == null) { return (<pre>...loding...</pre>) }
-  if (error != null) { return (<div className='errors'>{error.message}</div>) }
-  if (data?.status !== 200) { return (<div className='errors'>{data.data.error}</div>) }
-  return (<pre>{data.data.join('\n')}</pre>)
 }
 
 export default function Page (): ReactElement {
@@ -81,7 +67,7 @@ export default function Page (): ReactElement {
                 onChange={(e) => {
                   const actualErrors = errors.filter((error: string) => !error.startsWith('Characters '))
                   setErrors(actualErrors)
-                  setCharacterSet(CHARACTER_SETS[e.target.value].key)
+                  setCharacterSet(CHARACTER_SETS[e.target.value])
                   setCharacters(CHARACTER_SETS[e.target.value].characters)
                 }}
               >
@@ -132,7 +118,7 @@ export default function Page (): ReactElement {
           </div>
         </fieldset>
       </form>
-      {showRandom > 0 && <RandomParts num={showRandom} count={count} length={length} characters={characters} />}
+      {showRandom > 0 && <RandomParts num={showRandom} count={count as number} length={length as number} characters={characters} />}
     </>
   )
 }

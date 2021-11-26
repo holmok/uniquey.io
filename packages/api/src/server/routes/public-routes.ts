@@ -49,11 +49,11 @@ async function getRandom (ctx: ServerContext): Promise<void> {
     multiByteCharacters: true
   }
   const response = uniqueyService.createRandomStrings(request)
-  if (response.isError === true) {
+  if (response.isError) {
     const error = response as UniqueyRandomErrorResponse
-    ctx.throw(error.message, 400)
+    ctx.throw(error.error, 400)
   } else {
     const output = response as UniqueyRandomGoodResponse
-    ctx.body = output.random
+    ctx.body = { ...output, isError: false }
   }
 }

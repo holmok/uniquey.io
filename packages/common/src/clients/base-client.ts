@@ -10,7 +10,6 @@ abstract class BaseClient {
     let response
     try {
       response = await this.axios.request<T>({ url, data, params, method })
-      console.log(response.data)
       return {
         data: response.data,
         status: response.status,

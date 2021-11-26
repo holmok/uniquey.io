@@ -18,7 +18,7 @@ class UniqueyServices {
       }
       return { ...output, isError: false }
     } catch (err: any) {
-      return { message: err.message, isError: true }
+      return { error: err.message, isError: true }
     }
   }
 }

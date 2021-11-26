@@ -19,6 +19,6 @@ export interface UniqueyRandomRequest {
 }
 
 export interface UniqueyRandomGoodResponse {random: string[]}
-export interface UniqueyRandomErrorResponse {message: string}
+export interface UniqueyRandomErrorResponse {error: string}
 
 export type UniqueyRandomResponse = (UniqueyRandomGoodResponse | UniqueyRandomErrorResponse) & {isError: boolean}
