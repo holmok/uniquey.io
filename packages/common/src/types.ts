@@ -11,3 +11,11 @@ export interface HeathCheckResponse {
   host: string
   environment: string
 }
+
+export interface UniqueyRandomRequest {
+  length?: number
+  characters?: string
+  count: number
+}
+
+export type UniqueyRandomResponse = string[]

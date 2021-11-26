@@ -7,10 +7,16 @@ import { Constants } from '@uniquey.io/common'
 
 export default function Page (): ReactElement {
   const system = getClients().system()
-  const { data, error } = SWR(system.names.healthCheck, async () => await system.healthCheck())
+  const uniquey = getClients().uniquey()
 
-  if (error != null) {
-    throw error
+  const systemResponse = SWR(system.names.healthCheck, async () => await system.healthCheck())
+  const uniqueyResponse = SWR(uniquey.names.random, () => uniquey.random({ count: 32, length: 32, characters: 'AaBbCc' }))
+
+  if (systemResponse.error != null) {
+    throw systemResponse.error
+  }
+  if (uniqueyResponse.error != null) {
+    throw uniqueyResponse.error
   }
   return (
     <>
@@ -18,7 +24,9 @@ export default function Page (): ReactElement {
         <title>{Constants.name} - Service Check</title>
       </Head>
       <h3>Service Check</h3>
-      <pre>{JSON.stringify(data, null, 2)}</pre>
+      <pre>{JSON.stringify(systemResponse.data, null, 2)}</pre>
+      <h3>Random Stuff</h3>
+      <pre>{JSON.stringify(uniqueyResponse.data, null, 2)}</pre>
     </>
   )
 }

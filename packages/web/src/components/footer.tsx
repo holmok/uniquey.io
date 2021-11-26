@@ -7,7 +7,7 @@ const PageFooter: NextComponentType = () => {
     <footer>
       <section className='container' id='footer'>
         <div className='lcr-container'>
-          <div><span className='text'><Link href='/'><a>Home</a></Link></span></div>
+          <div><span className='text'><Link href='/'><a>home</a></Link></span></div>
           <div><span className='text'>{Constants.copyright}</span></div>
           <div><span className='text'><Link href='#top'><a>^ back to top</a></Link></span></div>
         </div>

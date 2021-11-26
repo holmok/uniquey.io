@@ -8968,6 +8968,11 @@ unique-string@^2.0.0:
   dependencies:
     crypto-random-string "^2.0.0"
 
+uniquey@^1.1.1:
+  version "1.1.1"
+  resolved "https://registry.yarnpkg.com/uniquey/-/uniquey-1.1.1.tgz#8d0f39954e4a275e6210302afce6bc9c6590e70c"
+  integrity sha512-DVjrQVJZEF+AeUeO+mkrrBnNMcs+v12wyRu2mZ+F/nloCU+UiHEWL++lrd+sArbssTlnGtXtLnCdK0q54bFnHA==
+
 universal-user-agent@^6.0.0:
   version "6.0.0"
   resolved "https://registry.yarnpkg.com/universal-user-agent/-/universal-user-agent-6.0.0.tgz#3381f8503b251c0d9cd21bc1de939ec9df5480ee"

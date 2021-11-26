@@ -10,7 +10,7 @@ const PageHeader: NextComponentType = () => {
       <section className='container' id='header'>
         <div className='lcr-container'>
           <div><span className='text'>{Constants.name}</span></div>
-          <div><span className='text'><Link href='#'><a onClick={() => setMenuVisible(!menuVisible)} id='menu'>MENU <span className='hamburger'>☰</span></a></Link></span></div>
+          <div><span className='text'><Link href='#'><a onClick={() => setMenuVisible(!menuVisible)} id='menu'>menu <span className='hamburger'>☰</span></a></Link></span></div>
         </div>
       </section>
       <section className='container' id='menu-container' style={menuVisible ? { display: 'block' } : { display: 'none' }}>

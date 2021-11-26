@@ -22,3 +22,27 @@ pre {
   padding: 0.5rem 1.25rem;
   background-color: #eee;
 }
+
+label.small {
+  font-size: 1.25rem;
+  padding-left: .33rem;
+  font-weight: lighter;
+}
+
+.errors {
+  background-color: #fcc;
+  border: #C33 1px solid;
+  color: #c33;
+  padding: .5rem 1rem;
+  margin-bottom: 2rem;
+}
+
+.errors ul {
+  list-style-type: none;
+  padding: 0;
+  margin: 0;
+}
+
+.errors li {
+  margin: 0;
+}
