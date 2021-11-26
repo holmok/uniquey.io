@@ -53,8 +53,8 @@ a#menu:hover {
 }
 
 #navigation>ul>li>a:hover {
-  background-color: #36c;
-  color: #fff;
+  background-color: #eee;
+  color: #039;
 }
 
 .hamburger {
