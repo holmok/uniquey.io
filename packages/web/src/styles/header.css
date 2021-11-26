@@ -14,6 +14,7 @@ a#menu {
   display: inline-block;
   margin-right: 1rem;
   color: #039;
+  text-decoration: none;
 }
 
 a#menu:hover {
@@ -50,6 +51,7 @@ a#menu:hover {
   height: auto;
   line-height: 3rem;
   margin: 0;
+  text-decoration: none;
 }
 
 #navigation>ul>li>a:hover {

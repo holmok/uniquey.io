@@ -12,6 +12,7 @@
 
 a {
   color: #039;
+  text-decoration: underline;
 }
 
 a:hover {
@@ -45,4 +46,15 @@ label.small {
 
 .errors li {
   margin: 0;
+}
+
+.info {
+  background-color: #eee;
+  padding: 1rem;
+  margin-top: 3rem;
+}
+
+.info p {
+  margin: .5rem;
+  line-height: normal;
 }

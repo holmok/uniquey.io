@@ -17,7 +17,7 @@ const PageHeader: NextComponentType = () => {
         <div id='navigation'>
           <ul>
             <li><Link href='/'><a onClick={() => setMenuVisible(false)}>Home</a></Link></li>
-            <li><Link href='/service-check'><a onClick={() => setMenuVisible(false)}>Service Check</a></Link></li>
+            <li><Link href='/about'><a onClick={() => setMenuVisible(false)}>About</a></Link></li>
           </ul>
         </div>
       </section>
