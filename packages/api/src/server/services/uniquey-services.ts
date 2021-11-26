@@ -1,6 +1,6 @@
 import Pino from 'pino'
 import Uniquey, { UniqueyOptions } from 'uniquey'
-import { UniqueyRandomResponse } from '@uniquey.io/common'
+import { UniqueyRandomGoodResponse, UniqueyRandomResponse } from '@uniquey.io/common'
 
 export type UniqueyRandomServiceRequest = UniqueyOptions & {count: number}
 
@@ -10,12 +10,16 @@ class UniqueyServices {
   }
 
   createRandomStrings (request: UniqueyRandomServiceRequest): UniqueyRandomResponse {
-    const uniquey = new Uniquey(request)
-    const output: UniqueyRandomResponse = []
-    for (let i = 0; i < request.count; i++) {
-      output.push(uniquey.create())
+    try {
+      const uniquey = new Uniquey(request)
+      const output: UniqueyRandomGoodResponse = { random: [] }
+      for (let i = 0; i < request.count; i++) {
+        output.random.push(uniquey.create())
+      }
+      return { ...output, isError: false }
+    } catch (err: any) {
+      return { message: err.message, isError: true }
     }
-    return output
   }
 }
 

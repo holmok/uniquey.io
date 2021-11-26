@@ -1,4 +1,5 @@
 import KoaRouter from '@koa/router'
+import { UniqueyRandomErrorResponse, UniqueyRandomGoodResponse } from '@uniquey.io/common'
 import { ServerContext } from '../server'
 import { UniqueyRandomServiceRequest } from '../services/uniquey-services'
 
@@ -47,5 +48,12 @@ async function getRandom (ctx: ServerContext): Promise<void> {
     allocate: validateQueryNumber(ctx.query.count, 1) * validateQueryNumber(ctx.query.length, 8),
     multiByteCharacters: true
   }
-  ctx.body = uniqueyService.createRandomStrings(request)
+  const response = uniqueyService.createRandomStrings(request)
+  if (response.isError === true) {
+    const error = response as UniqueyRandomErrorResponse
+    ctx.throw(error.message, 400)
+  } else {
+    const output = response as UniqueyRandomGoodResponse
+    ctx.body = output.random
+  }
 }

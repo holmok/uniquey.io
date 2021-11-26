@@ -4,6 +4,7 @@ import Layout from '../components/layout'
 import { Constants } from '@uniquey.io/common'
 import { getClients } from './_app'
 import SWR from 'swr'
+import { validateCharactersLength, validateCharactersUnique } from 'src/utils'
 
 const CHARACTER_SETS = {
   base62: { key: 'base62', label: 'Base62', characters: '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ' },
@@ -18,14 +19,14 @@ const CHARACTER_SETS = {
 
 function RandomParts (props: any): ReactElement {
   const uniquey = getClients().uniquey()
-  const { data, error } = SWR(`${uniquey.names.random}_${props.num}`, () => uniquey.random({
+  const { data, error } = SWR(`${uniquey.names.random}_${props.num}`, async () => await uniquey.random({
     characters: props.characters,
     length: props.length,
     count: props.count
   }))
-  if (error != null) { return (<div className='error'>{error.message}</div>) }
   if (data == null) { return (<pre>...loding...</pre>) }
-  console.log(data)
+  if (error != null) { return (<div className='errors'>{error.message}</div>) }
+  if (data?.status !== 200) { return (<div className='errors'>{data.data.error}</div>) }
   return (<pre>{data.data.join('\n')}</pre>)
 }
 
@@ -62,9 +63,9 @@ export default function Page (): ReactElement {
                   const newCharacters = (e.target as HTMLInputElement).value
                   if (newCharacters.length === 0) {
                     actualErrors.push('Characters cannot be empty')
-                  } else if (newCharacters.length > 256) {
+                  } else if (validateCharactersLength(newCharacters) === false) {
                     actualErrors.push(`Characters must be less than 256 character (you got ${newCharacters.length.toLocaleString()}) `)
-                  } else if (newCharacters.length !== (new Set(newCharacters.split(''))).size) {
+                  } else if (validateCharactersUnique(newCharacters) !== false) {
                     actualErrors.push('Characters must be unique.')
                   }
                   setErrors(actualErrors)
@@ -126,7 +127,7 @@ export default function Page (): ReactElement {
           </div>
           <div className='row'>
             <div className='column'>
-              <input className='button-primary' type='button' value='Create Random Strings' onClick={handleCreateRandom} />
+              <input className='button-primary' disabled={errors.length > 0} type='button' value='Create Random Strings' onClick={handleCreateRandom} />
             </div>
           </div>
         </fieldset>
