@@ -27,3 +27,13 @@ export function validateCharactersUnique (chars: string): boolean {
   const set = new Set(split)
   return split.length !== set.size
 }
+
+export function getLocalStorage (key: string, defaultValue: string): string {
+  if (typeof window === 'undefined' || window.localStorage == null) return defaultValue
+  return window.localStorage.getItem(key) ?? defaultValue
+}
+
+export function setLocalStorage (key: string, value: string): void {
+  if (typeof window === 'undefined' || window.localStorage == null) return
+  window.localStorage.setItem(key, value)
+}

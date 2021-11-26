@@ -8,7 +8,7 @@
     "@types/node": "^16.11.6",
     "@types/react": "^17.0.33",
     "@typescript-eslint/parser": "^5.2.0",
-    "eslint": "^8.3.0",
+    "eslint": "^7.0.0",
     "eslint-config-next": "12.0.4",
     "milligram": "^1.4.1",
     "ts-standard": "^11.0.0",
@@ -17,7 +17,6 @@
   },
   "dependencies": {
     "@uniquey.io/common": "^1.0.0",
-    "eslint": "^7.0.0",
     "next": "12.0.4",
     "react": "17.0.2",
     "react-dom": "17.0.2",

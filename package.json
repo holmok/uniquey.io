@@ -19,6 +19,7 @@
     "build:api": "lerna run build --scope=@uniquey.io/api",
     "build:common": "lerna run build --scope=@uniquey.io/common",
     "build:web": "lerna run build --scope=@uniquey.io/web",
+    "export:web": "lerna run export --scope=@uniquey.io/web",
     "rebuild": "lerna clean -y && lerna bootstrap && lerna run build"
   },
   "devDependencies": {
