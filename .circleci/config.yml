@@ -26,9 +26,15 @@ jobs:
           key: node-deps-v1-{{ .Branch }}-{{checksum "yarn.lock"}}
           paths:
             - ~/.npm
+            - node_modules
+            - packages/api/dist
+            - packages/common/dist
+            - packages/web/out
       - run:
           name: Build all
-          command: yarn rebuild
+          command: 
+            - yarn rebuild
+            - yarn export:web
 
 # Invoke jobs via workflows
 # See: https://circleci.com/docs/2.0/configuration-reference/#workflows
