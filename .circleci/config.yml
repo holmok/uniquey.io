@@ -4,7 +4,7 @@ orbs:
   aws-s3: circleci/aws-s3@3.0
 
 jobs:
-  build:
+  install:
     docker:
       - image: cimg/node:16.13
     steps:
@@ -21,23 +21,14 @@ jobs:
       - run:
           name: Lerna Bootstrap
           command: yarn bootstrap
-      - run:
-          name: Build Workspaces
-          command: yarn build
-      - run:
-          name: Export Static Web
-          command: yarn export:web
       - save_cache:
-          key: uniquey_io_yarn-{{checksum "yarn.lock"}}
+          key: uniquey_io_yarn_cache-{{checksum "yarn.lock"}}
           paths:
             - .yarn_cache
       - save_cache:
-          key: uniquey_io_arch-{{ .Branch }}-{{ .Revision }}
+          key: uniquey_io_node_modules-{{checksum "yarn.lock"}}
           paths:
             - node_modules
-            - packages/api/dist
-            - packages/common/dist
-            - packages/web/out
   lint: 
     docker:
       - image: cimg/node:16.13
@@ -45,10 +36,41 @@ jobs:
       - checkout
       - restore_cache:
           keys:
-            - uniquey_io_arch-{{ .Branch }}-{{ .Revision }}
+            - uniquey_io_node_modules-{{checksum "yarn.lock"}}
       - run: 
           name: Run Lint
           command: yarn lint
+
+  build:
+    docker:
+      - image: cimg/node:16.13
+    steps:
+      - checkout
+      - restore_cache:
+          keys:
+            - uniquey_io_node_modules-{{checksum "yarn.lock"}}
+      - run:
+          name: Build Workspaces
+          command: yarn build
+      - run:
+          name: Export Static Web
+          command: yarn export:web
+      - save_cache:
+          key: uniquey_io_build_web-{{ .Branch }}-{{ .Revision }}
+          paths:
+            - packages/api/dist
+            - packages/common/dist
+            - packages/web/out
+      - save_cache:
+          key: uniquey_io_build_api-{{ .Branch }}-{{ .Revision }}
+          paths:
+            - packages/api/dist
+            - packages/common/dist
+      - save_cache:
+          key: uniquey_io_build_web-{{ .Branch }}-{{ .Revision }}
+          paths:
+            - packages/web/out  
+
   push_to_s3:
     docker:
       - image: 'cimg/python:3.6'
@@ -56,20 +78,24 @@ jobs:
       - checkout
       - restore_cache:
           keys:
-            - uniquey_io_arch-{{ .Branch }}-{{ .Revision }}
+            - uniquey_io_build_web-{{ .Branch }}-{{ .Revision }}
       - aws-s3/sync:
           arguments: |
             --acl public-read \
             --cache-control "max-age=86400"
           from: packages/web/out
           to: 's3://uniquey.io/$CIRCLE_BRANCH/$CIRCLE_SHA1/'
+
 workflows:
   branch-job:
     jobs:
-      - build
+      - install
       - lint:
           requires:
-            - build
-      - push_to_s3:
+            - install
+      - build:
           requires:
             - lint
+      - push_to_s3:
+          requires:
+            - build
