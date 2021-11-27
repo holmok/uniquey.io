@@ -56,12 +56,6 @@ jobs:
           name: Export Static Web
           command: yarn export:web
       - save_cache:
-          key: uniquey_io_build_web-{{ .Branch }}-{{ .Revision }}
-          paths:
-            - packages/api/dist
-            - packages/common/dist
-            - packages/web/out
-      - save_cache:
           key: uniquey_io_build_api-{{ .Branch }}-{{ .Revision }}
           paths:
             - packages/api/dist
