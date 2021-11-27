@@ -15,6 +15,7 @@
     "dev:api": "cd packages/api && yarn run dev",
     "dev:web": "cd packages/web && yarn run dev",
     "dev": "yarn build:common && concurrently --kill-others \"yarn dev:api\" \"yarn dev:web\" ",
+    "bootstrap": "lerna bootstrap",
     "build": "lerna run build",
     "build:api": "lerna run build --scope=@uniquey.io/api",
     "build:common": "lerna run build --scope=@uniquey.io/common",

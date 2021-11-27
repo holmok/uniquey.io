@@ -26,8 +26,11 @@ jobs:
           name: Install Packages
           command: yarn --cache-folder .yarn_cache
       - run:
-          name: Bootstrap and Build Workspaces
-          command: yarn rebuild --cache-folder .yarn_cache
+          name: Lerna Bootstrap
+          command: yarn bootstrap --cache-folder .yarn_cache
+      - run:
+          name: Build Workspaces
+          command: yarn build
       - run:
           name: Export Static Web
           command: yarn export:web
