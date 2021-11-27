@@ -21,6 +21,9 @@ jobs:
       - run:
           name: Lerna Bootstrap
           command: yarn bootstrap
+      - run:
+          name: Build Common
+          command: yarn build:common
       - save_cache:
           key: uniquey_io_yarn_cache-{{checksum "yarn.lock"}}
           paths:
@@ -29,6 +32,10 @@ jobs:
           key: uniquey_io_node_modules-{{checksum "yarn.lock"}}
           paths:
             - node_modules
+      - save_cache:
+          key: uniquey_io_build_common-{{ .Branch }}-{{ .Revision }}
+          paths:
+            - packages/common/dist 
   lint: 
     docker:
       - image: cimg/node:16.13
@@ -37,6 +44,9 @@ jobs:
       - restore_cache:
           keys:
             - uniquey_io_node_modules-{{checksum "yarn.lock"}}
+      - restore_cache:
+          keys:
+            - uniquey_io_build_common-{{ .Branch }}-{{ .Revision }}
       - run: 
           name: Run Lint
           command: yarn lint
@@ -49,6 +59,9 @@ jobs:
       - restore_cache:
           keys:
             - uniquey_io_node_modules-{{checksum "yarn.lock"}}
+      - restore_cache:
+          keys:
+            - uniquey_io_build_common-{{ .Branch }}-{{ .Revision }}
       - run:
           name: Build Workspaces
           command: yarn build
@@ -59,7 +72,6 @@ jobs:
           key: uniquey_io_build_api-{{ .Branch }}-{{ .Revision }}
           paths:
             - packages/api/dist
-            - packages/common/dist
       - save_cache:
           key: uniquey_io_build_web-{{ .Branch }}-{{ .Revision }}
           paths:
