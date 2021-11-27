@@ -56,9 +56,6 @@ jobs:
           keys:
             - uniquey_io_arch-{{ .Branch }}-{{ .Revision }}
       - run: 
-          name: List Static
-          command: ls -lha packages/web/out
-      - run: 
           name: Run Lint
           command: yarn lint
         
