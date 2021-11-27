@@ -2,6 +2,7 @@ import { ChangeEvent, ReactElement, useState } from 'react'
 import Head from 'next/head'
 import Layout from '../components/layout'
 import RandomParts from '../components/random'
+import Sources from '../components/sources'
 import { Constants } from '@uniquey.io/common'
 import * as Utils from 'src/utils'
 
@@ -35,7 +36,7 @@ export default function Page (): ReactElement {
   const [showRandom, setShowRandom] = useState<number>(0)
 
   // event handlers
-  function handleCreateRandom (): void {
+  async function handleCreateRandom (): Promise<void> {
     if (errors.length === 0) {
       setShowRandom(Date.now())
     }
@@ -100,7 +101,12 @@ export default function Page (): ReactElement {
       <Head>
         <title>{Constants.name} - Home</title>
       </Head>
-      <h3>Create a Bunch of Random Strings</h3>
+      <div className='row'>
+        <div className='column'><h3>Create a Bunch of Random Strings</h3></div>
+        <div className='column'>
+          <p className='rate-limit-info'>You are rate limited to 60 requests per minute.</p>
+        </div>
+      </div>
       <div className='errors' style={errors.length > 0 ? { display: 'block' } : { display: 'none' }}>
         <ul>
           {errors.map((error: string, index: number) => (<li key={index}>{error}</li>))}
@@ -160,6 +166,7 @@ export default function Page (): ReactElement {
               />
             </div>
           </div>
+          <Sources />
         </fieldset>
       </form>
       {showRandom > 0 &&

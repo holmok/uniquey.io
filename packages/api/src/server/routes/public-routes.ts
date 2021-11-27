@@ -69,13 +69,13 @@ async function getRandom (ctx: ServerContext): Promise<void> {
   if (jwt == null || ip == null) ctx.throw(401)
   let id = null
   try {
-    id = tokenService.getToken(ip)
+    id = tokenService.validateToken(ip, jwt as string)
   } catch (err: any) {
     ctx.throw(401)
   }
 
   const requests = (cache.get(id) ?? 0) + 1
-  if (requests > 6) ctx.throw(429)
+  if (requests > 60) ctx.throw(429)
   cache.set(id, requests)
 
   const request: UniqueyRandomServiceRequest = {

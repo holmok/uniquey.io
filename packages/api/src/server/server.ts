@@ -5,6 +5,7 @@ import Http from 'http'
 import Middleware from './middleware'
 import { ServerOptions } from '../config/default'
 import Services from './services'
+import Cors from '@koa/cors'
 
 export type ServerContextState = Koa.DefaultState & {
   config: Config.IConfig
@@ -50,6 +51,8 @@ export default class Server {
       ctx.state.services = services
       await next()
     })
+
+    this.app.use(Cors({ allowHeaders: ['jwt'] }))
 
     // set up middleware (includes routing middleware)
     const middleware = Middleware(this.config, this.logger)

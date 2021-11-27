@@ -14,7 +14,7 @@
   "scripts": {
     "dev:api": "cd packages/api && yarn run dev",
     "dev:web": "cd packages/web && yarn run dev",
-    "dev": "concurrently --kill-others \"yarn dev:api\" \"yarn dev:web\" ",
+    "dev": "yarn build:common && concurrently --kill-others \"yarn dev:api\" \"yarn dev:web\" ",
     "build": "lerna run build",
     "build:api": "lerna run build --scope=@uniquey.io/api",
     "build:common": "lerna run build --scope=@uniquey.io/common",

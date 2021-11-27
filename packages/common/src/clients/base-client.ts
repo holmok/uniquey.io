@@ -14,26 +14,39 @@ abstract class BaseClient {
 
     const exp: number | undefined = JSON.parse(jsonPayload).exp
     const now = Math.ceil(Date.now() / 1000)
-    return exp != null && exp > now
+    return exp == null || exp < now
   };
 
-  private async getToken (): Promise<string> {
+  private async getToken (): Promise<string | null> {
     if (typeof window === 'undefined' || window.localStorage == null) {
-      throw new Error('browser not supported')
+      return null
     }
-    const token = window.localStorage.getItem('jwt')
-    if (token != null && !this.tokenExpired(token)) return token
-    else {
-      const response = await this.axios.request<{jwt: string}>({ url: '/token', method: 'GET' })
-      return response.data.jwt
+    try {
+      const token = window.localStorage.getItem('jwt')
+      if (token != null && !this.tokenExpired(token)) return token
+      else {
+        const response = await this.axios.request<{token: string}>({ url: '/token', method: 'GET' })
+        const jwt = response.data.token
+        if (jwt != null) { window.localStorage.setItem('jwt', jwt) }
+        return jwt
+      }
+    } catch (err) {
+      return null
     }
   }
 
   abstract get names (): {[key: string]: string}
-  protected async request<T>(url: string, data?: any, params?: any, method: Method = 'GET'): Promise<ClientResponse<T>> {
+  protected async request<T >(url: string, data?: any, params?: any, method: Method = 'GET'): Promise<ClientResponse<T | {error: string}>> {
     let response
     try {
       const jwt = await this.getToken()
+      if (jwt == null) {
+        return {
+          data: { error: 'Token issue, your browser my not support this website.  Or a token was already given to this IP for a different client.  Please wait a minute and try again.' },
+          status: 401,
+          statusText: 'unauthorize'
+        }
+      }
       response = await this.axios.request<T>({ url, data, params, method, headers: { jwt } })
       return {
         data: response.data,

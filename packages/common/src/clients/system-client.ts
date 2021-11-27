@@ -9,6 +9,6 @@ export default class SystemClient extends BaseClient {
   }
 
   async healthCheck (): Promise<ClientResponse<HeathCheckResponse>> {
-    return await this.request<HeathCheckResponse>('/ok')
+    return await this.request<HeathCheckResponse>('/ok') as ClientResponse<HeathCheckResponse>
   }
 }

@@ -13,6 +13,6 @@ export default class UniqueyClient extends BaseClient {
     if (options.characters != null) {
       url += `&characters=${encodeURIComponent(options.characters)}`
     }
-    return await this.request<UniqueyRandomResponse>(url)
+    return await this.request<UniqueyRandomResponse>(url) as ClientResponse<UniqueyRandomResponse>
   }
 }

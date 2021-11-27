@@ -49,12 +49,21 @@ label.small {
 }
 
 .info {
-  background-color: #eee;
-  padding: 1rem;
-  margin-top: 3rem;
+  border-top: 1px solid #ccc;
+  border-bottom: 1px solid #ccc;
+  padding: .5rem 1rem;
+  margin: 1rem 0;
 }
 
 .info p {
   margin: .5rem;
   line-height: normal;
+}
+
+.rate-limit-info {
+  font-weight: bold;
+  color: #c33;
+  position: relative;
+  top: 1rem;
+  text-align: right;
 }

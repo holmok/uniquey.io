@@ -19,8 +19,9 @@ export default function RandomParts (props: RandomPartsProps): ReactElement {
     count: props.count
   }))
   if (data == null) {
-    return (<pre>...loading...</pre>)
-  } else if (error != null) {
+    return (<></>)
+  } else
+  if (error != null) {
     return (<div className='errors'>{error.message}</div>)
   } else if (data?.status !== 200) {
     const response = data.data as UniqueyRandomErrorResponse

@@ -2,6 +2,7 @@ import { ReactElement } from 'react'
 import Head from 'next/head'
 import Layout from '../../components/layout'
 import { Constants } from '@uniquey.io/common'
+import Sources from '../../components/sources'
 
 export default function Page (): ReactElement {
   return (
@@ -34,6 +35,7 @@ export default function Page (): ReactElement {
         <li><a href='https://www.linkedin.com/in/christopherholmok/' target='_blank' rel='noreferrer'>My LinkedIn</a></li>
         <li><a href='https://holmok.me/' target='_blank' rel='noreferrer'>My Photography</a></li>
       </ul>
+      <Sources />
     </>
   )
 }
