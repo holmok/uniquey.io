@@ -62,7 +62,7 @@ jobs:
             --acl public-read \
             --cache-control "max-age=86400"
           from: packages/web/out
-          to: 's3://uniquey.io/{{ .Revision }}/'
+          to: 's3://uniquey.io/$CIRCLE_BRANCH/$CIRCLE_SHA1/'
 workflows:
   branch-job:
     jobs:
