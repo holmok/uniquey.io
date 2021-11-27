@@ -37,8 +37,6 @@ jobs:
             - packages/common/dist
             - packages/web/out
   test: 
-    requires:
-      - build
     docker:
       - image: cimg/node:16.13
     steps:
@@ -59,3 +57,5 @@ workflows:
     jobs:
       - build
       - test
+          requires:
+            - build
