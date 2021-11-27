@@ -56,6 +56,6 @@ workflows:
   branch-job:
     jobs:
       - build
-      - test
+      - test:
           requires:
             - build
