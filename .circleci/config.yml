@@ -37,7 +37,7 @@ jobs:
             - packages/common/dist
             - packages/web/out
   test: 
-  requires:
+    requires:
       - build
     docker:
       - image: cimg/node:16.13
