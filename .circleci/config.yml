@@ -70,6 +70,6 @@ workflows:
       - lint:
           requires:
             - build
-      - push_to_s3 
+      - push_to_s3:
           requires:
             - lint
