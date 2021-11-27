@@ -27,7 +27,7 @@ jobs:
           command: yarn --cache-folder .yarn_cache
       - run:
           name: Lerna Bootstrap
-          command: yarn bootstrap --cache-folder .yarn_cache
+          command: yarn bootstrap
       - run:
           name: Build Workspaces
           command: yarn build
