@@ -18,20 +18,24 @@ jobs:
           # See the configuration reference documentation for more details on using restore_cache and save_cache steps
           # https://circleci.com/docs/2.0/configuration-reference/?section=reference#save_cache
           keys:
-            - uniquey-io-{{ .Branch }}-{{checksum "yarn.lock"}}
+            - uniquey_io-{{ .Branch }}-{{checksum "yarn.lock"}}
       - run:
-          name: install packages
-          command: yarn
+          name: Set Yarn Cache
+          command: yarn config set cache-folder .yarn_cache
       - run:
-          name: Build all
-          command: yarn rebuild
+          name: Install Packages
+          command: yarn --cache-folder .yarn_cache
+      - run:
+          name: Bootstrap and Build Workspaces
+          command: yarn rebuild --cache-folder .yarn_cache
       - run:
           name: Export Static Web
           command: yarn export:web
       - save_cache:
-          key: uniquey-io-{{ .Branch }}-{{checksum "yarn.lock"}}
+          key: uniquey_io-{{ .Branch }}-{{checksum "yarn.lock"}}
           paths:
             - ~/.npm
+            - .yarn_cache
             - node_modules
             - packages/api/dist
             - packages/common/dist
@@ -45,7 +49,7 @@ jobs:
           # See the configuration reference documentation for more details on using restore_cache and save_cache steps
           # https://circleci.com/docs/2.0/configuration-reference/?section=reference#save_cache
           keys:
-            - uniquey-io-{{ .Branch }}-{{checksum "yarn.lock"}}
+            - uniquey_io-{{ .Branch }}-{{checksum "yarn.lock"}}
       - run: 
           name: list static
           command: ls -lha packages/web/out
