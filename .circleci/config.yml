@@ -45,7 +45,7 @@ jobs:
             - packages/api/dist
             - packages/common/dist
             - packages/web/out
-  test: 
+  lint: 
     docker:
       - image: cimg/node:16.13
     steps:
