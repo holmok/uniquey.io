@@ -98,7 +98,7 @@ jobs:
       - restore_cache:
           keys:
             - uniquey_io_build_web-{{ .Branch }}-{{ .Revision }}
-      - aws/ecr/build-and-push-image:
+      - aws-ecr/build-and-push-image:
           repo: uniquey-api
           tag: latest,$CIRCLE_SHA1
 
