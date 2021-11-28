@@ -90,20 +90,6 @@ jobs:
             --cache-control "max-age=86400"
           from: packages/web/out
           to: 's3://uniquey.io/'
-  publish_api_docker:
-    docker:
-       - image: 'cimg/python:3.6'
-    steps:
-      - run:
-          name: start dock
-          command: docker run -v /var/run/docker.sock:/var/run/docker.sock -ti docker
-      - checkout
-      - restore_cache:
-          keys:
-            - uniquey_io_build_web-{{ .Branch }}-{{ .Revision }}
-      - aws-ecr/build-and-push-image:
-          repo: uniquey-api
-          tag: latest,$CIRCLE_SHA1
 
 workflows:
   branch-job:
@@ -118,7 +104,15 @@ workflows:
       - push_to_s3:
           requires:
             - build
-      - publish_api_docker:
+      - aws-ecr/build-and-push-image:
+          repo: uniquey-api
+          account-url: AWS_ECR_ACCOUNT_URL
+          aws-access-key-id: AWS_ACCESS_KEY_ID
+          aws-secret-access-key: AWS_SECRET_ACCESS_KEY
+          dockerfile: Dockerfile
+          path: .
+          region: AWS_REGION
+          tag: "$CIRCLE_SHA1"
           requires:
             - build
 
