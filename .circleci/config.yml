@@ -112,7 +112,7 @@ workflows:
           dockerfile: Dockerfile
           path: .
           region: AWS_REGION
-          tag: "$CIRCLE_SHA1", latest
+          tag: "$CIRCLE_SHA1","latest"
           requires:
             - build
 
