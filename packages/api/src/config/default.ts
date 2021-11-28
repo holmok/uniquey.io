@@ -6,14 +6,14 @@ export interface ServerOptions {
   port: number
 }
 
-export const name: string = `${Constants.name}/api`
-
 export const environment = 'development'
+
+export const name: string = `${Constants.name}/${environment}/api`
 
 export const jwtKey = process.env.JWT_KEY ?? 'this-is-a-secret'
 
 export const pino: Pino.LoggerOptions = {
-  name: `${name}/${environment}`,
+  name: `${name}`,
   level: process.env.LOG_LEVEL ?? 'debug'
 }
 

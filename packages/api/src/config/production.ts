@@ -1,16 +1,17 @@
 import Pino from 'pino'
 import { ServerOptions } from './default'
-
-export const name = 'holmok.com/api'
+import { Constants } from '@uniquey.io/common'
 
 export const environment = 'production'
 
+export const name: string = `${Constants.name}/${environment}/api`
+
 export const pino: Pino.LoggerOptions = {
-  name: `${name}/${environment}`,
+  name,
   level: process.env.LOG_LEVEL ?? 'info'
 }
 
 export const server: ServerOptions = {
   host: '0.0.0.0',
-  port: 80
+  port: 8081
 }

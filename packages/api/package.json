@@ -42,7 +42,7 @@
     "compile": "tsc",
     "clean": "rm -rf dist",
     "build": "yarn lint && yarn clean && yarn compile",
-    "start": "NODE_ENV=production node dist/index.js | pino-tiny",
+    "start": "NODE_ENV=production node dist/index.js",
     "dev": "nodemon | pino-tiny"
   }
 }

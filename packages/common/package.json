@@ -39,8 +39,6 @@
     "lint": "ts-standard src",
     "compile": "tsc",
     "clean": "rm -rf dist",
-    "build": "yarn lint && yarn clean && yarn compile",
-    "start": "NODE_ENV=production node dist/index.js | pino-tiny",
-    "dev": "nodemon | pino-tiny"
+    "build": "yarn lint && yarn clean && yarn compile"
   }
 }

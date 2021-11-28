@@ -2,6 +2,7 @@ version: 2.1
 
 orbs:
   aws-s3: circleci/aws-s3@3.0
+  aws-ecr: circleci/aws-ecr@7.3.0
 
 jobs:
   install:
@@ -50,7 +51,6 @@ jobs:
       - run: 
           name: Run Lint
           command: yarn lint
-
   build:
     docker:
       - image: cimg/node:16.13
@@ -76,7 +76,6 @@ jobs:
           key: uniquey_io_build_web-{{ .Branch }}-{{ .Revision }}
           paths:
             - packages/web/out  
-
   push_to_s3:
     docker:
       - image: 'cimg/python:3.6'
@@ -90,7 +89,18 @@ jobs:
             --acl public-read \
             --cache-control "max-age=86400"
           from: packages/web/out
-          to: 's3://uniquey.io/$CIRCLE_BRANCH/$CIRCLE_SHA1/'
+          to: 's3://uniquey.io/'
+  publish_api_docker:
+    docker:
+      - image: 'cimg/python:3.6'
+    steps:
+      - checkout
+      - restore_cache:
+          keys:
+            - uniquey_io_build_web-{{ .Branch }}-{{ .Revision }}
+      - aws/ecr/build-and-push-image:
+          repo: uniquey-api
+          tag: latest,$CIRCLE_SHA1
 
 workflows:
   branch-job:
@@ -105,3 +115,7 @@ workflows:
       - push_to_s3:
           requires:
             - build
+      - publish_api_docker:
+          requires:
+            - build
+

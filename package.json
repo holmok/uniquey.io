@@ -17,6 +17,7 @@
     "dev": "yarn build:common && concurrently --kill-others \"yarn dev:api\" \"yarn dev:web\" ",
     "bootstrap": "lerna bootstrap",
     "build": "lerna run build",
+    "start": "cd packages/api && yarn start",
     "lint": "lerna run lint",
     "build:api": "lerna run build --scope=@uniquey.io/api",
     "build:common": "lerna run build --scope=@uniquey.io/common",
