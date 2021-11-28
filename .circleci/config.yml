@@ -92,8 +92,15 @@ jobs:
           to: 's3://uniquey.io/'
   publish_api_docker:
     docker:
-      - image: 'cimg/python:3.6'
+      - image: docker:20.10.10-ce-git    
     steps:
+      - run:
+          name: Install dependencies
+          command: |
+            apk add --no-cache \
+              py-pip=21.0
+            pip install \
+              awscli==2.3.6
       - checkout
       - restore_cache:
           keys:
