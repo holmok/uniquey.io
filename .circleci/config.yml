@@ -9,5 +9,5 @@ jobs:
       - checkout
       - pulumi/login
       - pulumi/update
-          working_directory: ./pulumi/
+          working_directory: './pulumi/'
           stack: $CIRCLE_BRANCH
