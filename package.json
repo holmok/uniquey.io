@@ -14,12 +14,15 @@
   "scripts": {
     "dev:api": "cd packages/api && yarn run dev",
     "dev:web": "cd packages/web && yarn run dev",
+    "start:api": "cd packages/api && yarn start",
+    "start:web": "cd packages/web && yarn start",
     "dev": "yarn build:common && concurrently --kill-others \"yarn dev:api\" \"yarn dev:web\" ",
     "build": "lerna run build",
     "build:api": "lerna run build --scope=@uniquey.io/api",
     "build:common": "lerna run build --scope=@uniquey.io/common",
     "build:web": "lerna run build --scope=@uniquey.io/web",
     "export:web": "lerna run export --scope=@uniquey.io/web",
+    "bootstrap": "lerna bootstrap",
     "rebuild": "lerna clean -y && lerna bootstrap && lerna run build"
   },
   "devDependencies": {

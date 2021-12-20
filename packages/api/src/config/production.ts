@@ -1,7 +1,7 @@
 import Pino from 'pino'
 import { ServerOptions } from './default'
 
-export const name = 'holmok.com/api'
+export const name = 'unique/api'
 
 export const environment = 'production'
 
@@ -12,5 +12,5 @@ export const pino: Pino.LoggerOptions = {
 
 export const server: ServerOptions = {
   host: '0.0.0.0',
-  port: 80
+  port: parseInt(process.env.PORT ?? '3000')
 }

@@ -1,0 +1,27 @@
+FROM node:17-slim
+
+### SET UP DIRS ###
+WORKDIR /usr/src/api
+RUN mkdir -p /usr/src/api/packages/api
+RUN mkdir -p /usr/src/api/packages/common
+
+### INSTAL DEPS ###
+COPY package.json .
+COPY yarn.lock .
+COPY lerna.json .
+COPY tsconfig.json .
+COPY package.json .
+COPY packages/api/package.json ./packages/api
+COPY packages/common/package.json ./packages/common
+RUN yarn
+
+### COPY AND BUILD ###
+COPY packages/api/ ./packages/api
+COPY packages/common/ ./packages/common
+RUN yarn bootstrap
+RUN yarn build:common
+RUN yarn build:api
+
+### SETTINGS ###
+EXPOSE 80
+CMD [ "yarn", "start:api" ]

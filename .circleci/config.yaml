@@ -1,0 +1,13 @@
+version: 2.1
+orbs:
+  pulumi: pulumi/pulumi@2.0
+jobs:
+  build:
+    docker:
+      - image: 'circleci/node:10'
+    working_directory: ~/pulumi/
+    stack: dev
+    steps:
+      - checkout
+      - pulumi/login
+      - pulumi/update

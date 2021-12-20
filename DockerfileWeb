@@ -1,0 +1,29 @@
+FROM node:16-slim
+
+WORKDIR /usr/src/app
+
+RUN mkdir -p /usr/src/app/packages/web
+RUN mkdir -p /usr/src/app/packages/common
+
+COPY package.json .
+COPY yarn.lock .
+COPY lerna.json .
+COPY tsconfig.json .
+COPY package.json .
+COPY packages/api/package.json ./packages/web
+COPY packages/common/package.json ./packages/common
+
+RUN yarn
+
+COPY packages/web/ ./packages/web
+COPY packages/common/ ./packages/common
+
+RUN yarn bootstrap
+RUN yarn build:common
+RUN yarn build:web
+
+EXPOSE 80
+
+ENV API_URL=http://localhost:8081
+
+CMD [ "yarn", "start:web" ]

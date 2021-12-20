@@ -6,8 +6,8 @@
     "target": "es6",
     "forceConsistentCasingInFileNames": true,
     "paths": {
-      "@holmok/*": [
-        "packages/*/src"
+      "@uniquey/*": [
+        "./packages/*/src"
       ]
     },
     "module": "commonjs",
