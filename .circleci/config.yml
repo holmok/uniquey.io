@@ -1,6 +1,6 @@
 version: 2.1
 orbs:
-  pulumi: pulumi/pulumi@2.0
+  pulumi: pulumi/pulumi@2.0.0
 jobs:
   build:
     docker:
