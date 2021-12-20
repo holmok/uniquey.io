@@ -5,11 +5,12 @@ jobs:
   build:
     docker:
       - image: 'circleci/node:10' # 10?
-    working_directory: ~/repo/pulumi
+    working_directory: ~/repo
     steps:
       - checkout
       - pulumi/login
       - run:
           command: npm install
       - pulumi/update:
+          working_directory: './pulumi/'
           stack: $CIRCLE_BRANCH
