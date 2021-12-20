@@ -10,7 +10,7 @@ jobs:
       - checkout
       - pulumi/login
       - run:
-          command: npm install
+          command: cd pulumi && npm install
       - pulumi/update:
           working_directory: './pulumi/'
           stack: $CIRCLE_BRANCH
