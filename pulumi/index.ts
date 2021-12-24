@@ -13,13 +13,14 @@ const image = GCP.container.getRegistryImage({
     tag: env.CIRCLE_SHA1,
     name: "uniquey-api"
 });
-export const imageName = image.then(i => i.name);
+
 const apiService = new GCP.cloudrun.Service("uniquey-api-service", {
     location,
+
     template: {
         spec: {
             containers: [{
-                image: imageName,
+                image: image.then(i => i.imageUrl),
                 resources: {
                     limits: {
                         memory: "512Mi",
@@ -33,7 +34,19 @@ const apiService = new GCP.cloudrun.Service("uniquey-api-service", {
     },
 }, { dependsOn: enableCloudRun });
 
+const noAuthIAMPolicy = GCP.organizations.getIAMPolicy({
+    bindings: [{
+        role: "roles/run.invoker",
+        members: ["allUsers"],
+    }],
+});
+const noAuthIamPolicy = new GCP.cloudrun.IamPolicy("noAuthIamPolicy", {
+    location: apiService.location,
+    project: apiService.project,
+    service: apiService.name,
+    policyData: noAuthIAMPolicy.then(noAuthIAMPolicy => noAuthIAMPolicy.policyData),
+});
+
 export default {
-    apiServiceStatuses: apiService.statuses,
-    image
+    serviceUrl: apiService.statuses[0].url,
 }
