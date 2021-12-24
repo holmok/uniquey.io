@@ -45,7 +45,8 @@ jobs:
 workflows:
   build-and-deploy:
     jobs:
-      - build-and-push
+      - build-and-publish-api
+      - build-and-publish-web
       - deploy:
           requires:
             - build-and-publish-api
