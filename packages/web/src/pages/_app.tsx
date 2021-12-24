@@ -1,13 +1,13 @@
 import type { ReactElement, ReactNode } from 'react'
 import type { NextPage } from 'next'
 import type { AppProps } from 'next/app'
-import { InitClients, Clients } from '@uniquey.io/common'
+import { InitClients, Clients, Constants } from '@uniquey.io/common'
 import 'milligram/dist/milligram.min.css'
 import '../styles/layout.css'
 import '../styles/header.css'
 import '../styles/footer.css'
 
-const clients = InitClients('/api')
+const clients = InitClients(Constants.apiUrl)
 
 type NextPageWithLayout = NextPage & {
   getLayout?: (page: ReactElement) => ReactNode
