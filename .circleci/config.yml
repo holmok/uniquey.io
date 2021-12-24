@@ -48,4 +48,5 @@ workflows:
       - build-and-push
       - deploy:
           requires:
-            - build-and-push
+            - build-and-publish-api
+            - build-and-publish-web
