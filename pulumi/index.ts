@@ -3,16 +3,6 @@ import * as GCP from "@pulumi/gcp";
 import * as Docker from "@pulumi/docker";
 import { env } from "process";
 
-const tag = `${new Date().getFullYear()}_${new Date().getMonth() + 1}_${new Date().getDate()}_${Date.now()}`
-
-const apiImage = new Docker.Image("uniquey-api-image", {
-    imageName: Pulumi.interpolate`gcr.io/${GCP.config.project}/uniquey-api-image:${tag}`,
-    build: {
-        context: "../",
-        dockerfile: "../DockerfileApi",
-    },
-});
-
 const enableCloudRun = new GCP.projects.Service("EnableCloudRun", {
     service: "run.googleapis.com",
 });
@@ -24,7 +14,7 @@ const apiService = new GCP.cloudrun.Service("uniquey-api-service", {
     template: {
         spec: {
             containers: [{
-                image: apiImage.imageName,
+                image: `uniquey-api:${env.CIRCLE_SHA1 || "latest"}`,
                 resources: {
                     limits: {
                         memory: "512Mi",
