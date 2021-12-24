@@ -9,12 +9,17 @@ const enableCloudRun = new GCP.projects.Service("EnableCloudRun", {
 
 const location = GCP.config.region || "us-central1";
 
+const image = GCP.container.getRegistryImage({
+    tag: env.CIRCLE_SHA1,
+    name: "uniquey-api"
+});
+export const imageName = image.then(i => i.name);
 const apiService = new GCP.cloudrun.Service("uniquey-api-service", {
     location,
     template: {
         spec: {
             containers: [{
-                image: `uniquey-api:${env.CIRCLE_SHA1 || "latest"}`,
+                image: imageName,
                 resources: {
                     limits: {
                         memory: "512Mi",
@@ -28,4 +33,7 @@ const apiService = new GCP.cloudrun.Service("uniquey-api-service", {
     },
 }, { dependsOn: enableCloudRun });
 
-export const apiServiceStatuses = apiService.statuses;
+export default {
+    apiServiceStatuses: apiService.statuses,
+    image
+}
