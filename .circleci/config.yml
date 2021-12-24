@@ -3,29 +3,28 @@ orbs:
   pulumi: pulumi/pulumi@2.0.0
   gcp-gcr: circleci/gcp-gcr@0.13.0
 workflows:
-  commit:
-    jobs:
-      build-and-push:
-        executor: gcp-gcr/default
-        steps:
-          - checkout
-          - gcp-gcr/gcr-auth
-          - gcp-gcr/build-image:
-              image: uniquey-api
-              dockerfile: DockerfileApi
-              tag: $CIRCLE_SHA1
-          - gcp-gcr/push-image:
-              image: uniquey-api
-              tag: $CIRCLE_SHA1
-      deploy:
-        docker:
-          - image: 'circleci/node:16'
-        working_directory: ~/repo
-        steps:
-          - checkout
-          - pulumi/login
-          - run:
-              command: cd pulumi && npm install
-          - pulumi/update:
-              working_directory: './pulumi/'
-              stack: $CIRCLE_BRANCH
+  jobs:
+    build-and-push:
+      executor: gcp-gcr/default
+      steps:
+        - checkout
+        - gcp-gcr/gcr-auth
+        - gcp-gcr/build-image:
+            image: uniquey-api
+            dockerfile: DockerfileApi
+            tag: $CIRCLE_SHA1
+        - gcp-gcr/push-image:
+            image: uniquey-api
+            tag: $CIRCLE_SHA1
+    deploy:
+      docker:
+        - image: 'circleci/node:16'
+      working_directory: ~/repo
+      steps:
+        - checkout
+        - pulumi/login
+        - run:
+            command: cd pulumi && npm install
+        - pulumi/update:
+            working_directory: './pulumi/'
+            stack: $CIRCLE_BRANCH
