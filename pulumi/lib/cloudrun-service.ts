@@ -4,8 +4,10 @@ import * as GCP from "@pulumi/gcp";
 import { env } from "process";
 
 export default function buildCouldRunService(
+    enableCloudRun: GCP.projects.Service,
     name: string,
     imageName: string,
+    commands: string[],
     envs: GCP.types.input.cloudrun.ServiceTemplateSpecContainerEnv[] = [],
     memory: string = "512Mi"
 ): Pulumi.Output<string> {
@@ -14,11 +16,6 @@ export default function buildCouldRunService(
     const image = GCP.container.getRegistryImage({
         tag: env.CIRCLE_SHA1,
         name: imageName
-    });
-
-    // insure google cloud run is enabled
-    const enableCloudRun = new GCP.projects.Service("EnableCloudRun", {
-        service: "run.googleapis.com",
     });
 
     const location = GCP.config.region || "us-central1";
@@ -36,7 +33,7 @@ export default function buildCouldRunService(
                         },
                     },
                     envs: [{ name: "NODE_ENV", value: "production" }, ...envs],
-                    commands: ["yarn", "start:api"],
+                    commands,
                 }],
                 containerConcurrency: 1,
             },
@@ -50,7 +47,7 @@ export default function buildCouldRunService(
         }],
     });
 
-    const noAuthIamPolicy = new GCP.cloudrun.IamPolicy("noAuthIamPolicy", {
+    const noAuthIamPolicy = new GCP.cloudrun.IamPolicy(`${name}-no-auth-iam-policy`, {
         location: service.location,
         project: service.project,
         service: service.name,
