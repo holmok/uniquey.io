@@ -5,7 +5,7 @@ orbs:
   gcp-gcr: circleci/gcp-gcr@0.13.0
 
 jobs:
-  build-and-push:
+  build-and-publish-api:
     executor: gcp-gcr/default
     steps:
       - checkout
@@ -16,6 +16,18 @@ jobs:
           tag: $CIRCLE_SHA1
       - gcp-gcr/push-image:
           image: uniquey-api
+          tag: $CIRCLE_SHA1
+  build-and-publish-web:
+    executor: gcp-gcr/default
+    steps:
+      - checkout
+      - gcp-gcr/gcr-auth
+      - gcp-gcr/build-image:
+          image: uniquey-web
+          dockerfile: DockerfileWeb
+          tag: $CIRCLE_SHA1
+      - gcp-gcr/push-image:
+          image: uniquey-web
           tag: $CIRCLE_SHA1
   deploy:
     docker:
