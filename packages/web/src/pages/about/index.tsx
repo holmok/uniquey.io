@@ -4,7 +4,7 @@ import Layout from '../../components/layout'
 import { Constants } from '@uniquey.io/common'
 import Sources from '../../components/sources'
 
-export default function Page (): ReactElement {
+export default function Page(): ReactElement {
   return (
     <>
       <Head>
@@ -22,9 +22,8 @@ export default function Page (): ReactElement {
         (Javascript, API, Markup). It uses <a href='https://nextjs.org/' target='_blank' rel='noreferrer'>Next.js</a> for the frontend,
         and it uses <a href='https://nodejs.org/' target='_blank' rel='noreferrer'>Node.js</a>
         and <a href='https://koajs.com/' target='_blank' rel='noreferrer'>Koa.js</a> for the back-end.
-        It is hosted on AWS using S3 for the frontend static
-        files and FarGate in ECS for the API. The whole thing is deployed with <a href='https://www.pumlumi.com/' target='_blank' rel='noreferrer'>Pulumi</a>,
-        and it is built with <a href='https://circleci.com/' target='_blank' rel='noreferrer'>CircleCI</a>.
+        It is hosted Google Cloud as two containers, one for the Front-End and one for the Back-End. The whole thing is deployed with <a href='https://www.pumlumi.com/' target='_blank' rel='noreferrer'>Pulumi</a>,
+        and it is built and deployed with <a href='https://circleci.com/' target='_blank' rel='noreferrer'>CircleCI</a>.
       </p>
       <p>
         Here are some links to other stuff:
