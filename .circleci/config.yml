@@ -23,7 +23,6 @@ workflows:
     jobs:
       - gcp-gcr/build-and-push-image:
           name: build-api
-          context: uniquey-api
           executor: gcp-gcr/default
           image: uniquey-api
           tag: $CIRCLE_SHA1
@@ -32,7 +31,6 @@ workflows:
           use-docker-layer-caching: true
       - gcp-gcr/build-and-push-image:
           name: build-web
-          context: uniquey-web
           executor: gcp-gcr/default
           image: uniquey-web
           tag: $CIRCLE_SHA1
