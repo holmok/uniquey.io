@@ -27,7 +27,6 @@ workflows:
           tag: $CIRCLE_SHA1
           dockerfile: DockerfileApi
           executor: gcp-gcr/default
-          setup-remote-docker: true
           use-docker-layer-caching: true
       - gcp-gcr/build-and-push-image:
           name: build-web
@@ -35,7 +34,6 @@ workflows:
           tag: $CIRCLE_SHA1
           dockerfile: DockerfileWeb
           executor: gcp-gcr/default
-          setup-remote-docker: true
           use-docker-layer-caching: true
       - deploy:
           requires:
