@@ -1,3 +1,4 @@
 config:
   gcp:project: uniquey-335618
   gcp:region: us-central1
+  uniquey:api_url: https://api.uniquey.io

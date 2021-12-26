@@ -8,7 +8,7 @@ export default function buildCouldRunService(
     commands: string[],
     envs: GCP.types.input.cloudrun.ServiceTemplateSpecContainerEnv[] = [],
     memory: string = "512Mi"
-): void /*GCP.cloudrun.DomainMapping*/ {
+): void {
 
     // get the image from name and build hash as tag
     const image = GCP.container.getRegistryImage({
@@ -20,9 +20,6 @@ export default function buildCouldRunService(
     const namespace = `${name}-${env.CIRCLE_BRANCH}`
     const service = new GCP.cloudrun.Service(`${namespace}-service`, {
         location,
-        metadata: {
-            namespace,
-        },
         template: {
             spec: {
                 containers: [{
@@ -53,12 +50,4 @@ export default function buildCouldRunService(
         service: service.name,
         policyData: noAuthIAMPolicy.then(noAuthIAMPolicy => noAuthIAMPolicy.policyData),
     });
-
-    // const domainMapping = new GCP.cloudrun.DomainMapping(`${namespace}-domain-mapping`, {
-    //     location: service.location,
-    //     metadata: { namespace },
-    //     spec: { routeName: service.name },
-    // });
-
-    // return domainMapping
 }
