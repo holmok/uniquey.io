@@ -5,35 +5,7 @@ orbs:
   gcp-gcr: circleci/gcp-gcr@0.13.0
 
 jobs:
-  build-and-publish-api:
-    executor: gcp-gcr/default
-    steps:
-      - checkout
-      - gcp-gcr/gcr-auth
-      - gcp-gcr/build-image:
-          image: uniquey-api
-          dockerfile: DockerfileApi
-          tag: $CIRCLE_SHA1
-          setup-remote-docker: true
-          use-docker-layer-caching: true
-      - gcp-gcr/push-image:
-          image: uniquey-api
-          tag: $CIRCLE_SHA1
-          setup-remote-docker: true
-          use-docker-layer-caching: true
-  build-and-publish-web:
-    executor: gcp-gcr/default
-    steps:
-      - checkout
-      - gcp-gcr/gcr-auth
-      - gcp-gcr/build-image:
-          image: uniquey-web
-          dockerfile: DockerfileWeb
-          tag: $CIRCLE_SHA1
-      - gcp-gcr/push-image:
-          image: uniquey-web
-          tag: $CIRCLE_SHA1
-  deploy:
+   deploy:
     docker:
       - image: 'circleci/node:16'
     working_directory: ~/repo
@@ -50,6 +22,7 @@ workflows:
   build-and-deploy:
     jobs:
       - gcp-gcr/build-and-push-image:
+          name: build-api
           context: uniquey-api
           executor: gcp-gcr/default
           image: uniquey-api
@@ -58,6 +31,7 @@ workflows:
           setup-remote-docker: true
           use-docker-layer-caching: true
       - gcp-gcr/build-and-push-image:
+          name: build-web
           context: uniquey-web
           executor: gcp-gcr/default
           image: uniquey-web
@@ -67,4 +41,5 @@ workflows:
           use-docker-layer-caching: true
       - deploy:
           requires:
-            - gcp-gcr/build-and-push-image
+            - build-web
+            - build-api
