@@ -20,6 +20,9 @@ export default function buildCouldRunService(
     const namespace = `${name}-${env.CIRCLE_BRANCH}`
     const service = new GCP.cloudrun.Service(`${namespace}-service`, {
         location,
+        metadata: {
+            namespace,
+        },
         template: {
             spec: {
                 containers: [{
@@ -32,7 +35,7 @@ export default function buildCouldRunService(
                     envs: [{ name: "NODE_ENV", value: "production" }, ...envs],
                     commands,
                 }],
-                containerConcurrency: 1,
+                containerConcurrency: 2,
             },
         },
     }, { dependsOn: enableCloudRun });
