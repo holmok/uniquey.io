@@ -26,6 +26,7 @@ workflows:
           image: uniquey-api
           tag: $CIRCLE_SHA1
           dockerfile: DockerfileApi
+          executer: docker:latest
           setup-remote-docker: true
           use-docker-layer-caching: true
       - gcp-gcr/build-and-push-image:
@@ -33,6 +34,7 @@ workflows:
           image: uniquey-web
           tag: $CIRCLE_SHA1
           dockerfile: DockerfileWeb
+          executer: docker:latest
           setup-remote-docker: true
           use-docker-layer-caching: true
       - deploy:
