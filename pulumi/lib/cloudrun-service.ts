@@ -1,6 +1,4 @@
-import * as Pulumi from "@pulumi/pulumi";
 import * as GCP from "@pulumi/gcp";
-
 import { env } from "process";
 
 export default function buildCouldRunService(
@@ -10,7 +8,7 @@ export default function buildCouldRunService(
     commands: string[],
     envs: GCP.types.input.cloudrun.ServiceTemplateSpecContainerEnv[] = [],
     memory: string = "512Mi"
-): Pulumi.Output<string> {
+): void /*GCP.cloudrun.DomainMapping*/ {
 
     // get the image from name and build hash as tag
     const image = GCP.container.getRegistryImage({
@@ -19,10 +17,9 @@ export default function buildCouldRunService(
     });
 
     const location = GCP.config.region || "us-central1";
-
-    const service = new GCP.cloudrun.Service(`${name}-${env.CIRCLE_BRANCH}-service`, {
+    const namespace = `${name}-${env.CIRCLE_BRANCH}`
+    const service = new GCP.cloudrun.Service(`${namespace}-service`, {
         location,
-
         template: {
             spec: {
                 containers: [{
@@ -47,12 +44,18 @@ export default function buildCouldRunService(
         }],
     });
 
-    const noAuthIamPolicy = new GCP.cloudrun.IamPolicy(`${name}-no-auth-iam-policy`, {
+    const noAuthIamPolicy = new GCP.cloudrun.IamPolicy(`${namespace}-no-auth-iam-policy`, {
         location: service.location,
         project: service.project,
         service: service.name,
         policyData: noAuthIAMPolicy.then(noAuthIAMPolicy => noAuthIAMPolicy.policyData),
     });
 
-    return service.statuses[0].url
+    // const domainMapping = new GCP.cloudrun.DomainMapping(`${namespace}-domain-mapping`, {
+    //     location: service.location,
+    //     metadata: { namespace },
+    //     spec: { routeName: service.name },
+    // });
+
+    // return domainMapping
 }
