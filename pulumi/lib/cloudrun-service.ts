@@ -3,7 +3,6 @@ import { env } from "process";
 
 export default function buildCouldRunService(
     enableCloudRun: GCP.projects.Service,
-    name: string,
     imageName: string,
     commands: string[],
     envs: GCP.types.input.cloudrun.ServiceTemplateSpecContainerEnv[] = [],
@@ -17,8 +16,8 @@ export default function buildCouldRunService(
     });
 
     const location = GCP.config.region || "us-central1";
-    const namespace = `${name}-${env.CIRCLE_BRANCH}`
-    const service = new GCP.cloudrun.Service(`${namespace}-service`, {
+    const name = `${imageName}-${env.CIRCLE_BRANCH}`
+    const service = new GCP.cloudrun.Service(`${name}-service`, {
         location,
         template: {
             spec: {
@@ -44,7 +43,7 @@ export default function buildCouldRunService(
         }],
     });
 
-    const noAuthIamPolicy = new GCP.cloudrun.IamPolicy(`${namespace}-no-auth-iam-policy`, {
+    const noAuthIamPolicy = new GCP.cloudrun.IamPolicy(`${name}-no-auth-iam-policy`, {
         location: service.location,
         project: service.project,
         service: service.name,

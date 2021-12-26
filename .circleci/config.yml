@@ -14,9 +14,13 @@ jobs:
           image: uniquey-api
           dockerfile: DockerfileApi
           tag: $CIRCLE_SHA1
+          setup-remote-docker: true
+          use-docker-layer-caching: true
       - gcp-gcr/push-image:
           image: uniquey-api
           tag: $CIRCLE_SHA1
+          setup-remote-docker: true
+          use-docker-layer-caching: true
   build-and-publish-web:
     executor: gcp-gcr/default
     steps:
@@ -45,9 +49,22 @@ jobs:
 workflows:
   build-and-deploy:
     jobs:
-      - build-and-publish-api
-      - build-and-publish-web
+      - gcp-gcr/build-and-push-image:
+          context: uniquey-api
+          executor: gcp-gcr/default
+          image: uniquey-api
+          tag: $CIRCLE_SHA1
+          dockerfile: DockerfileApi
+          setup-remote-docker: true
+          use-docker-layer-caching: true
+      - gcp-gcr/build-and-push-image:
+          context: uniquey-web
+          executor: gcp-gcr/default
+          image: uniquey-web
+          tag: $CIRCLE_SHA1
+          dockerfile: DockerfileWeb
+          setup-remote-docker: true
+          use-docker-layer-caching: true
       - deploy:
           requires:
-            - build-and-publish-api
-            - build-and-publish-web
+            - gcp-gcr/build-and-push-image
