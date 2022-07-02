@@ -39,7 +39,7 @@ export default class Server {
     const host = `http://${serverOptions.host}:${serverOptions.port.toString()}`
 
     // set up services
-    const services = new Services(this.config, this.logger)
+    const services = new Services(this.logger)
 
     // set up server context/state for request/response
     this.app.use(async (ctx: ServerContext, next) => {

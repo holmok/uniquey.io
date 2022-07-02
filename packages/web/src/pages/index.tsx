@@ -103,9 +103,6 @@ export default function Page (): ReactElement {
       </Head>
       <div className='row'>
         <div className='column'><h3>Create a Bunch of Random Strings</h3></div>
-        <div className='column'>
-          <p className='rate-limit-info'>You are rate limited to 60 requests per minute.</p>
-        </div>
       </div>
       <div className='errors' style={errors.length > 0 ? { display: 'block' } : { display: 'none' }}>
         <ul>
@@ -166,7 +163,6 @@ export default function Page (): ReactElement {
               />
             </div>
           </div>
-          <Sources />
         </fieldset>
       </form>
       {showRandom > 0 &&
@@ -176,6 +172,7 @@ export default function Page (): ReactElement {
           length={length as number}
           characters={characters}
         />}
+      <Sources />
     </>
   )
 }

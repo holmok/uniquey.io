@@ -10,8 +10,6 @@ export const name: string = `${Constants.name}/api`
 
 export const environment = 'development'
 
-export const jwtKey = process.env.JWT_KEY ?? 'this-is-a-secret'
-
 export const pino: Pino.LoggerOptions = {
   name: `${name}/${environment}`,
   level: process.env.LOG_LEVEL ?? 'debug'
